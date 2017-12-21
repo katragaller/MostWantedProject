@@ -7,14 +7,19 @@ function app(people){
   var searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'", yesNo).toLowerCase();
   switch(searchType){
     case 'yes':
-    // TODO: search by name
+   // searchFirstName(people);
+   // searchLastName(people);
     var foundPerson = searchByName(people);
+    displayPerson(foundPerson);
     break;
     case 'no':
-    // TODO: search by traits
+   people = searchByGender(people);
+   people = searchByHeight(people);
+   people = searchByWeight(people);
+   people = searchByEyeColor(people);
     break;
     default:
-    app(people); // restart app
+    app(people);
     break;
   }
 }
@@ -33,13 +38,14 @@ function mainMenu(person, people){
 
   switch(displayOption){
     case "info":
-    // TODO: get person's info
+    displayInformation(person);
+    alert(result);
     break;
     case "family":
-    // TODO: get person's family
+    displayFamily(person, people);
     break;
     case "descendants":
-    // TODO: get person's descendants
+    displayDescendants(person, people);
     break;
     case "restart":
     app(people); // restart
@@ -55,18 +61,100 @@ function searchByName(people){
   var firstName = promptFor("What is the person's first name?", chars);
   var lastName = promptFor("What is the person's last name?", chars);
 
-  var foundPerson = people.filter(person){
+  var foundPerson = people.filter(function(person){
     if(person.firstName === firstName && person.lastName === lastName){
       return true;
     }
     else{
       return false;
     }
-  }
-  // TODO: find the person using the name they entered
-  return foundPerson;
+  })
+  var person = foundPerson[0];
+  return person;
+}
+  function searchByGender(people){
+  var gender = promptFor("Is the person male or female?", chars);
+
+  var foundPeople = people.filter(function(person){
+    if(person.gender === gender){
+      return true;
+    }
+    else{
+      return false;
+    }
+  })
+  return foundPeople;
 }
 
+  function searchByHeight(people){
+  var height = promptFor("How tall is the person?", chars);
+
+  var foundPeople = people.filter(function(person){
+    if(person.height === height){
+      return true;
+    }
+    else{
+      return false;
+    }
+  })
+  return foundPeople;
+}
+
+  function searchWeight(people){
+  var weight = promptFor("What does the person weigh?", chars);
+
+  var foundPeople = people.filter(function(person){
+    if(person.weight === weight){
+      return true;
+    }
+    else{
+      return false;
+    }
+  })
+  return foundPeople;
+}
+
+  function searchByDateofBirth(people){
+  var dob = promptFor("When was the person born", chars);
+
+  var foundPeople = people.filter(function(person){
+    if(person.dob === dob){
+      return true;
+    }
+    else{
+      return false;
+    }
+  })
+  return foundPeople;
+}
+
+  function searchOccupation(people){
+  var occupation = promptFor("What does the person do for a living?", chars);
+
+  var foundPeople = people.filter(function(person){
+    if(person.occupation === occupation){
+      return true;
+    }
+    else{
+      return false;
+    }
+  })
+  return foundPeople;
+}
+
+  function searchByEyeColor(people){
+  var eyeColor = promptFor("What color eyes do they have?", chars);
+
+  var foundPeople = people.filter(function(person){
+    if(person.eyeColor === eyeColor){
+      return true;
+    }
+    else{
+      return false;
+    }
+  })
+  return foundPeople;
+}
 // alerts a list of people
 function displayPeople(people){
   alert(people.map(function(person){
@@ -75,12 +163,16 @@ function displayPeople(people){
 }
 
 function displayPerson(person){
-  // print all of the information about a person:
-  // height, weight, age, name, occupation, eye color.
-  var personInfo = "First Name: " + person.firstName + "\n";
-  personInfo += "Last Name: " + person.lastName + "\n";
-  // TODO: finish getting the rest of the information to display
-  alert(personInfo);
+  var personInfo = "First Name : " + person.firstName + "\n";
+  personInfo += "Last Name : " + person.lastName + "\n";
+  personInfo += "Gender" + person.gender + "\n";
+  personInfo += "Date of Birth" + person.dob + "\n";
+  personInfo += "Height" + person.height + "\n";
+  personInfo += "Weight" + person.weight + "\n";
+  personInfo += "Eye Color" + person.eyeColor + "\n";
+  personInfo += "Occupation" + person.occupation + "\n";
+
+    alert(personInfo);
 }
 
 // function that prompts and validates user input
@@ -100,3 +192,7 @@ function yesNo(input){
 function chars(input){
   return true; // default validation only
 }
+ 
+
+
+  
