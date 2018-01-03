@@ -11,6 +11,7 @@ function app(people){
    // searchLastName(people);
     var foundPerson = searchByName(people);
     displayPerson(foundPerson);
+    mainMenu(person, people);
     break;
     case 'no':
    people = searchByGender(people);
@@ -23,6 +24,8 @@ function app(people){
     break;
   }
 }
+
+
 
 // Menu function to call once you find who you are looking for
 function mainMenu(person, people){
@@ -38,14 +41,17 @@ function mainMenu(person, people){
 
   switch(displayOption){
     case "info":
-    displayInformation(person);
-    alert(result);
+    displayPerson(person);
+    mainMenu(person, people);
     break;
     case "family":
-    displayFamily(person, people);
+    displayPeople(people);
+    var displayFamily = searchFamily(person, people);
+    mainMenu(person, people)
     break;
     case "descendants":
-    displayDescendants(person, people);
+    searchDescendants(person, people);
+    mainMenu(person, people);
     break;
     case "restart":
     app(people); // restart
@@ -155,6 +161,23 @@ function searchByName(people){
   })
   return foundPeople;
 }
+
+function searchFamily(person, people){
+
+var foundPeople = people.filter(function(dataObject){
+     if (person.parents[0] === dataObject.id || 
+    person.parents[1] === dataObject.id || 
+    person.id === dataObject.parent[0] || 
+    person.id === dataObject.parent[1]){
+      return true;
+    }
+    else{
+      return false;
+    }
+  })
+  return foundPeople;
+}
+}
 // alerts a list of people
 function displayPeople(people){
   alert(people.map(function(person){
@@ -175,7 +198,9 @@ function displayPerson(person){
     alert(personInfo);
 }
 
-// function that prompts and validates user input
+
+
+  
 function promptFor(question, valid){
   do{
     var response = prompt(question).trim();
