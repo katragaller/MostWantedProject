@@ -163,12 +163,19 @@ function searchByName(people){
 }
 
 function searchFamily(person, people){
-
 var foundPeople = people.filter(function(dataObject){
-     if (person.parents[0] === dataObject.id || 
-    person.parents[1] === dataObject.id || 
+     if (
+    person.parent[0] === dataObject.id || 
+    person.parent[1] === dataObject.id || 
     person.id === dataObject.parent[0] || 
-    person.id === dataObject.parent[1]){
+    person.id === dataObject.parent[1] ||
+    person.parent[1] === dataObject.parent[1] ||
+    person.parent[0] === dataObject.parent[1] ||
+    person.parent[0] === dataObject.parent[0] ||  
+    person.parent[1] === dataObject.parent[0] ||
+    person.id === dataObject.currentSpouse
+   ){
+
       return true;
     }
     else{
@@ -189,7 +196,7 @@ function displayPerson(person){
   var personInfo = "First Name : " + person.firstName + "\n";
   personInfo += "Last Name : " + person.lastName + "\n";
   personInfo += "Gender" + person.gender + "\n";
-  personInfo += "Date of Birth" + person.dob + "\n";
+  personInfo += "Age" + person.dob + "\n";
   personInfo += "Height" + person.height + "\n";
   personInfo += "Weight" + person.weight + "\n";
   personInfo += "Eye Color" + person.eyeColor + "\n";
@@ -198,9 +205,12 @@ function displayPerson(person){
     alert(personInfo);
 }
 
+function searchDescendents(person,people){
+if (person.id === person.parent[0] )
 
 
-  
+}
+
 function promptFor(question, valid){
   do{
     var response = prompt(question).trim();
