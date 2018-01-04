@@ -11,7 +11,7 @@ function app(people){
    // searchLastName(people);
     var foundPerson = searchByName(people);
     displayPerson(foundPerson);
-    mainMenu(person, people);
+    mainMenu(foundPerson, people);
     break;
     case 'no':
    people = searchByGender(people);
@@ -45,8 +45,8 @@ function mainMenu(person, people){
     mainMenu(person, people);
     break;
     case "family":
-    displayPeople(people);
     var displayFamily = searchFamily(person, people);
+    displayPeople(displayFamily);
     mainMenu(person, people)
     break;
     case "descendants":
@@ -163,27 +163,51 @@ function searchByName(people){
 }
 
 function searchFamily(person, people){
+  var family = [];
 var foundPeople = people.filter(function(dataObject){
      if (
-    person.parent[0] === dataObject.id || 
-    person.parent[1] === dataObject.id || 
-    person.id === dataObject.parent[0] || 
-    person.id === dataObject.parent[1] ||
-    person.parent[1] === dataObject.parent[1] ||
-    person.parent[0] === dataObject.parent[1] ||
-    person.parent[0] === dataObject.parent[0] ||  
-    person.parent[1] === dataObject.parent[0] ||
-    person.id === dataObject.currentSpouse
-   ){
+    person.parents[0] === dataObject.id || person.parents[1] === dataObject.id || person.id === dataObject.parents[0] || person.id === dataObject.parents[1] ||person.id === dataObject.currentSpouse)
+    {
 
       return true;
     }
+
     else{
       return false;
     }
   })
+  var foundSiblings = people.filter(function(dataObject){
+  if (dataObject.parents.length > 0){
+    if (person.parents[0] === dataObject.parents[0] || person.parents[1] === dataObject.parents[1] || person.parents[0] === dataObject.parents[1] || person.parents[1] === dataObject.parents[0] ){
+    return true;
+    }
+    else{
+      return false;
+    }
+  }
+  else{ 
+    return false;
+  }
+  var foundFamily = searchFamily(foundPeople, foundSiblings);
+  family = foundFamily.concat(family);
+})
   return foundPeople;
 }
+
+function searchDescendants(person, people){
+  var descendants = [];
+  var foundPeople = people.filter(function(dataObject){
+    if (person.id === dataObject.parents[0] || person.id === dataObject.parents[1])
+     return true;
+    })
+  if (foundPeople.length > 0 ){
+    for (var i = 0; i< foundPeople.length; i++){
+    var foundDescendants = searchDescendants(foundPeople[i], people);
+    descendants = foundDescendants.concat(descendants);
+    }
+    descendants = foundPeople.concat(descendants, foundPeople);
+  }
+  return foundPeople;
 }
 // alerts a list of people
 function displayPeople(people){
@@ -205,11 +229,6 @@ function displayPerson(person){
     alert(personInfo);
 }
 
-function searchDescendents(person,people){
-if (person.id === person.parent[0] )
-
-
-}
 
 function promptFor(question, valid){
   do{
