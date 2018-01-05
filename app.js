@@ -18,6 +18,8 @@ function app(people){
    people = searchByHeight(people);
    people = searchByWeight(people);
    people = searchByEyeColor(people);
+   people = searchByAge(people);
+   displayPeople(people);
     break;
     default:
     app(people);
@@ -50,7 +52,9 @@ function mainMenu(person, people){
     mainMenu(person, people)
     break;
     case "descendants":
-    searchDescendants(person, people);
+    var descendants = [];
+    var foundDescendants = searchDescendants(person, people, descendants);
+    displayPeople(foundDescendants);
     mainMenu(person, people);
     break;
     case "restart":
@@ -59,7 +63,8 @@ function mainMenu(person, people){
     case "quit":
     return; // stop execution
     default:
-    return mainMenu(person, people); // ask again
+  mainMenu(person, people);
+  break; // ask again
   }
 }
 
@@ -96,7 +101,7 @@ function searchByName(people){
   var height = promptFor("How tall is the person?", chars);
 
   var foundPeople = people.filter(function(person){
-    if(person.height === height){
+    if(person.height == height){
       return true;
     }
     else{
@@ -106,11 +111,11 @@ function searchByName(people){
   return foundPeople;
 }
 
-  function searchWeight(people){
+  function searchByWeight(people){
   var weight = promptFor("What does the person weigh?", chars);
 
   var foundPeople = people.filter(function(person){
-    if(person.weight === weight){
+    if(person.weight == weight){
       return true;
     }
     else{
@@ -133,6 +138,26 @@ function searchByName(people){
   })
   return foundPeople;
 }
+
+function searchByAge(people){
+  var birthDate = promptFor ("How old is the person?", chars);
+  var newYear = new Date();
+  var foundPeople = people.map(function(person){
+    var dob = new Date (person.dob);
+    var age = Math.round((newYear - dob) / 31557600000)
+    person.age == age;
+      return person.age;
+  });
+  var foundPeople = people.filter(function(person){
+      if(person.dob == age);
+      return true;
+  })
+      else{
+        return false;
+      }
+    }
+    return foundPeople;
+  }
 
   function searchOccupation(people){
   var occupation = promptFor("What does the person do for a living?", chars);
@@ -194,22 +219,21 @@ var foundPeople = people.filter(function(dataObject){
   return foundPeople;
 }
 
-function searchDescendants(person, people){
-  var descendants = [];
+function searchDescendants(person, people, descendants){
   var foundPeople = people.filter(function(dataObject){
     if (person.id === dataObject.parents[0] || person.id === dataObject.parents[1])
      return true;
     })
   if (foundPeople.length > 0 ){
-    for (var i = 0; i< foundPeople.length; i++){
-    var foundDescendants = searchDescendants(foundPeople[i], people);
+    for (var i = 0; i < foundPeople.length; i++){
+    var foundDescendants = searchDescendants(foundPeople[i], people, descendants);
     descendants = foundDescendants.concat(descendants);
     }
-    descendants = foundPeople.concat(descendants, foundPeople);
+  descendants = foundPeople.concat(descendants);
   }
   return foundPeople;
 }
-// alerts a list of people
+
 function displayPeople(people){
   alert(people.map(function(person){
     return person.firstName + " " + person.lastName;
